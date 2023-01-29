@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from .serializers import UserCreateSerializer, UserSerializer,UserLoginSerializer
 from django.contrib.auth import authenticate
+from django.contrib import auth
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -42,15 +43,20 @@ class RetrieveUserView(APIView):
 
 #sign in view
 class UserLoginView(APIView):
-   def post(self, request, format=None):
-    serializer = UserLoginSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    email = serializer.data.get('email')
-    password = serializer.data.get('password')
-    user = authenticate(email=email, password=password)
-    if user is not None:
-      token = get_tokens_for_user(user)
-      return Response({'token':token, 'msg':'Login Success'}, status=status.HTTP_200_OK)
-    else:
-      return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
+  serializer = UserLoginSerializer()
+  def post(self, request, format=None):
+    data = self.request.data
+    email = data['email']
+    password = data['password']
+    try:
+      user = authenticate(email=email, password=password)
+      if user is not None:
+          auth.login(request, user)
+          return Response({ 'success': 'User authenticated' })
+      else:
+          return Response({ 'error': 'Error Authenticating' })
+    except:
+      return Response({ 'error': 'Something went wrong when logging in' })
+  
+
     
