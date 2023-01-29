@@ -9,11 +9,11 @@ const Navbar = () => {
 	const authLinks = (
 		<>
 			<li className='nav-item'>
-				<NavLink className='nav-link' to='/dashboard'>
-					Dashboard
+				<NavLink className='nav-link' to='/profile'>
+					Profile
 				</NavLink>
 			</li>
-            
+
 			<li className='nav-item'>
 				<a className='nav-link' href='#!' onClick={() => dispatch(logout())}>
 					Logout
@@ -41,7 +41,7 @@ const Navbar = () => {
 		<nav className='navbar navbar-expand-lg bg-light'>
 			<div className='container-fluid'>
 				<Link className='navbar-brand' to='/'>
-					Auth Site
+					Post Site
 				</Link>
 				<button
 					className='navbar-toggler'

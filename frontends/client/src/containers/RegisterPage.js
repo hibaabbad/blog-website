@@ -12,10 +12,11 @@ const RegisterPage = () => {
 		first_name: '',
 		last_name: '',
 		email: '',
+        phone:'',
 		password: '',
 	});
 
-	const { first_name, last_name, email, password } = formData;
+	const { first_name, last_name, email,phone, password } = formData;
 
 	const onChange = e => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +25,7 @@ const RegisterPage = () => {
 	const onSubmit = e => {
 		e.preventDefault();
 
-		dispatch(register({ first_name, last_name, email, password }));
+		dispatch(register({ first_name, last_name, email,phone, password }));
 	};
 
 	if (registered) return <Navigate to='/login' />;
@@ -69,6 +70,19 @@ const RegisterPage = () => {
 						name='email'
 						onChange={onChange}
 						value={email}
+						required
+					/>
+				</div>
+                <div className='form-group mt-3'>
+					<label className='form-label' htmlFor='phone'>
+						Phone
+					</label>
+					<input
+						className='form-control'
+						type='int'
+						name='phone'
+						onChange={onChange}
+						value={phone}
 						required
 					/>
 				</div>
