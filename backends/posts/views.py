@@ -188,11 +188,11 @@ class CommentAPIView(APIView):
 class UserAnnonceAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request,pk, *args, **kwargs):
-        user = UserAccount.objects.filter(pk =pk).first()
+    def get(self, request,email, *args, **kwargs):
+        user = UserAccount.objects.get(email=email)
         if user is None:
             return Response({'error': 'User not found'}, status = status.HTTP_404_NOT_FOUND)
-        posts = Annonces.objects.filter(user = user)
+        posts = Annonces.objects.get(user = user)
         serializer = AnnonceSerializer(posts, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
