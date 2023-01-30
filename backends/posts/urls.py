@@ -15,8 +15,6 @@ urlpatterns = [
     path('<email>/', UserAnnonceAPIView.as_view(), name='userposts'),
     #favorite list
     path('<int:pk>/favorite/', AnnonceFavoriteView.as_view(), name='favoriteList'),
-    #history list 
-    path('<int:pk>/history/', AnnonceHistoryView.as_view(), name='historyList'),
     #search list 
     path('category/', AnnonceSearchView.as_view(), name='category')
 ]

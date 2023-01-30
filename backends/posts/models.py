@@ -46,11 +46,6 @@ class Favorite(models.Model):
     user=models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     post=models.ManyToManyField(Annonces)
 
-
-#history model
-class History(models.Model):
-    user=models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    post=models.ManyToManyField(Annonces)
     
 
 #comments model

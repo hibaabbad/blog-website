@@ -112,26 +112,6 @@ class AnnonceFavoriteView(ListAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-#history list, add to history
-class AnnonceHistoryView(ListAPIView):
-    serializer_class = HistorySerializer
-    permission_classes = [IsAuthenticated]
-    def get(self, request, *args, **kwargs):
-        posts = History.objects.get(user=request.user)
-        serializer = HistorySerializer(posts, many = True)
-        return Response(serializer.data, status = status.HTTP_200_OK)
-
-    def post(self, request, *args,pk, **kwargs):
-        post = self.get_object(pk)
-        data = {
-            'user': request.user.id,
-            'post': post
-        }
-        serializer = HistorySerializer(data = data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
 #search view 
