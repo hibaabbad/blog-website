@@ -1,13 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
-from .serializers import UserCreateSerializer, UserSerializer,UserLoginSerializer
+from .serializers import UserCreateSerializer, UserSerializer,UserLoginSerializer,UpdateUserSerializer
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from rest_framework_simplejwt.tokens import RefreshToken
 from .renderers import UserRenderer
-
-
+from .models import UserAccount
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import UpdateAPIView
 
 def get_tokens_for_user(user):
   refresh = RefreshToken.for_user(user)
@@ -62,4 +63,8 @@ class UserLoginView(APIView):
       return Response({ 'error': 'Something went wrong when logging in' })
   
 
-    
+class UpdateProfileView(UpdateAPIView):
+
+    queryset = UserAccount.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = UpdateUserSerializer

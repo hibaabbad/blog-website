@@ -9,7 +9,7 @@ User = get_user_model()
 class UserCreateSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ('first_name', 'last_name', 'email', 'password','phone')
+    fields = ('first_name', 'last_name', 'email', 'password','phone','adress')
 
   def validate(self, data):
     user = User(**data)
@@ -33,6 +33,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
       email=validated_data['email'],
       password=validated_data['password'],
       phone=validated_data['phone'],
+      adress=validated_data['adress'],
     )
 
     return user
@@ -41,11 +42,37 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ('first_name', 'last_name', 'email','phone')
+    fields = ('first_name', 'last_name', 'email','phone','adress')
 
 class UserLoginSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
     fields = ['email', 'password']
 
-  
+class UpdateUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email','phone','adress')
+        extra_kwargs = {
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+        }
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
+            raise serializers.ValidationError({"email": "This email is already in use."})
+        return value
+
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data['first_name']
+        instance.last_name = validated_data['last_name']
+        instance.email = validated_data['email']
+        instance.phone = validated_data['phone']
+        instance.adress = validated_data['adress']
+
+        instance.save()
+
+        return instance
