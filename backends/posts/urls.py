@@ -5,6 +5,8 @@ from .views import *
 urlpatterns = [
     #posts list 
     path('', AnnonceListAPIView.as_view(), name='AnnonceList'),
+    #add annonce
+    path('add/', AnnonceAPIView.as_view(), name='Add Annonce'),
     #post detail 
     path('<int:pk>/', AnnonceDetailAPIView.as_view(), name='AnnonceDetail'),
     #post comments  

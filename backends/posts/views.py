@@ -4,19 +4,22 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from .models import Annonces,Comments
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.filters import SearchFilter,OrderingFilter
 from users.models import UserAccount
 
 
-#posts list,add post view
+#posts list
 class AnnonceListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def get(self, request, *args, **kwargs):
         posts = Annonces.objects.all()
         serializer = AnnonceSerializer(posts, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
+#add post 
+class AnnonceAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         data = {
             'user': request.user.id,

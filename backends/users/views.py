@@ -5,6 +5,7 @@ from .serializers import UserCreateSerializer, UserSerializer,UserLoginSerialize
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from rest_framework_simplejwt.tokens import RefreshToken
+from .renderers import UserRenderer
 
 
 
@@ -43,6 +44,7 @@ class RetrieveUserView(APIView):
 
 #sign in view
 class UserLoginView(APIView):
+  renderer_classes = [UserRenderer]
   serializer = UserLoginSerializer()
   def post(self, request, format=None):
     data = self.request.data
@@ -52,7 +54,8 @@ class UserLoginView(APIView):
       user = authenticate(email=email, password=password)
       if user is not None:
           auth.login(request, user)
-          return Response({ 'success': 'User authenticated' })
+          token = get_tokens_for_user(user)
+          return Response({ 'token':token,'success': 'User authenticated' })
       else:
           return Response({ 'error': 'Error Authenticating' })
     except:
