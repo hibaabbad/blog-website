@@ -40,7 +40,7 @@ class AnnonceAPIView(APIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-#post detail,update post,delete post  
+#post detail
 class AnnonceDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get_object(self, pk):
@@ -55,6 +55,14 @@ class AnnonceDetailAPIView(APIView):
             return Response({'error': 'Post not found'}, status = status.HTTP_404_NOT_FOUND)
         serializer = AnnonceSerializer(post)
         return Response(serializer.data, status = status.HTTP_200_OK)
+#edit post
+class AnnonceUpdate(APIView):
+    permission_classes = [IsAuthenticated]
+    def get_object(self, pk):
+        try:
+            return Annonces.objects.get(pk = pk)
+        except Annonces.DoesNotExist:
+            return None
 
     def put(self, request, pk, *args, **kwargs):
         post = self.get_object(pk)
@@ -80,6 +88,15 @@ class AnnonceDetailAPIView(APIView):
             return Response({"error": "You are not authorized to edit this post"}, status = status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# delete post
+class AnnonceDelete(APIView):
+    permission_classes = [IsAuthenticated]
+    def get_object(self, pk):
+        try:
+            return Annonces.objects.get(pk = pk)
+        except Annonces.DoesNotExist:
+            return None
+
     def delete(self, request, pk, *args, **kwargs):
         post = self.get_object(pk)
         if post is None:
@@ -90,7 +107,7 @@ class AnnonceDetailAPIView(APIView):
         return Response({"error": "You are not authorized to delete this post"}, status = status.HTTP_401_UNAUTHORIZED)
 
 
-#favorite list, add to favorite
+#favorite list
 class AnnonceFavoriteView(ListAPIView):
     serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticated]
@@ -98,6 +115,16 @@ class AnnonceFavoriteView(ListAPIView):
         posts = Favorite.objects.get(user=request.user)
         serializer = FavoriteSerializer(posts, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
+
+#add favorite
+class AddFavorite(APIView):
+    serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self, pk):
+        try:
+            return Annonces.objects.get(pk = pk)
+        except Annonces.DoesNotExist:
+            return None
 
     def post(self, request, *args,pk, **kwargs):
         post = self.get_object(pk)
@@ -130,7 +157,7 @@ class AnnonceSearchView(APIView):
 
         return Response(serializer.data)
 
-#comments list, add comment
+#comments list
 class CommentAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -148,6 +175,15 @@ class CommentAPIView(APIView):
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
+class AddCommentAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Annonces.objects.get(pk = pk)
+        except Annonces.DoesNotExist:
+            return None
+    
     def post(self, request, pk, *args, **kwargs):
         post = self.get_object(pk)
         if post is None:

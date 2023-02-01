@@ -9,12 +9,20 @@ urlpatterns = [
     path('add/', AnnonceAPIView.as_view(), name='Add Annonce'),
     #post detail 
     path('<int:pk>/', AnnonceDetailAPIView.as_view(), name='AnnonceDetail'),
+    #edit post
+    path('<int:pk>/edit/', AnnonceUpdate.as_view(), name='EditAnnonce'),
+    #delete post
+    path('<int:pk>/delete/', AnnonceDelete.as_view(), name='DeleteAnnonce'),
     #post comments  
-    path('<int:pk>/comment/', CommentAPIView.as_view(), name='comments'),
+    path('<int:pk>/comment/', CommentAPIView.as_view(), name='Comments'),
+    #add comments 
+    path('<int:pk>/addcomment/', AddCommentAPIView.as_view(), name='AddComments'),
     #user posts
-    path('<email>/', UserAnnonceAPIView.as_view(), name='userposts'),
+    path('<email>/', UserAnnonceAPIView.as_view(), name='UserPosts'),
     #favorite list
-    path('<int:pk>/favorite/', AnnonceFavoriteView.as_view(), name='favoriteList'),
+    path('favorite/', AnnonceFavoriteView.as_view(), name='FavoriteList'),
+    #add favorite
+    path('<int:pk>/favorite/', AddFavorite.as_view(), name='AddFavorite'),
     #search list 
     path('category/', AnnonceSearchView.as_view(), name='category')
 ]

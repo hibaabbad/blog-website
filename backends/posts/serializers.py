@@ -9,7 +9,7 @@ class AnnonceSerializer(serializers.ModelSerializer):
     
 #comments serializer
 class CommentSerializer(serializers.ModelSerializer):
-  user = serializers.ReadOnlyField(source = 'user.firs_tname')
+  user = serializers.ReadOnlyField(source = 'user.first_name')
   class Meta:
         model = Comments
         fields = '__all__'
@@ -22,9 +22,5 @@ class FavoriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-#history serializer
-class HistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = History
-        fields = '__all__'
+
 
